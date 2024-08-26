@@ -26,7 +26,7 @@ SECRET_KEY = config("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [".vercel.app"]
+ALLOWED_HOSTS = ["localhost", ".vercel.app"]
 
 
 # Application definition
@@ -37,11 +37,37 @@ REST_FRAMEWORK = {
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Blog API",
-    "DESCRIPTION": "Your project description",
+    "DESCRIPTION": """
+        A comprehensive Blog API built with Python's Django Rest Framework with a PostgreSQL Database.
+
+        Features:
+        - Manage blog posts (CRUD operations)
+        - User authentication and authorization with JWT
+        - Pagination and filtering of posts
+        - Support for comments and tags on posts
+        - Customizable settings for individual users
+    """,
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
-    # OTHER SETTINGS
+    "SCHEMA_PATH_PREFIX": r"/api/v[0-9]",
+    # Appending security schemes
+    "APPEND_COMPONENTS": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+            },
+        }
+    },
+    # Security settings
+    "SECURITY": [
+        {
+            "bearerAuth": [],
+        }
+    ],
 }
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
