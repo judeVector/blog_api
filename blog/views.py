@@ -2,25 +2,35 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view
+from rest_framework.decorators import APIView, api_view
+
+from drf_spectacular.utils import extend_schema
 
 from .models import Post
 from .serializers import PostSerializer
 
+tags = ["Auth"]
 
-@api_view(["GET"])
-def server_detail(request: Request):
-    response = {
-        "name": "Blog API",
-        "version": "1.0.0",
-        "author": "Jude Ndubuisi",
-        "contact": "ikechukwujudendubuisi@gmail.com",
-        "website": "https://judevector.dev",
-        "description": "A simple REST API for managing blog posts",
-        "twitter": "http://twitter.com/judevector",
-    }
 
-    return Response(data=response, status=status.HTTP_200_OK)
+class ServerDetail(APIView):
+    @extend_schema(
+        "",
+        summary="Retrieve site details",
+        description="This endpoint retrieves few details of the site/application",
+        tags=["HealthCheck"],
+    )
+    def get(self, request: Request):
+        response = {
+            "name": "Blog API",
+            "version": "1.0.0",
+            "author": "Jude Ndubuisi",
+            "contact": "ikechukwujudendubuisi@gmail.com",
+            "website": "https://judevector.dev",
+            "description": "A simple REST API for managing blog posts",
+            "twitter": "http://twitter.com/judevector",
+        }
+
+        return Response(data=response, status=status.HTTP_200_OK)
 
 
 @api_view(["GET"])
