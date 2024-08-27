@@ -7,11 +7,11 @@ from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
 
 from .models import Post
-from .serializers import PostSerializer
+from .serializers import PostSerializer, ServerDetailSerializer, ServerStatusSerializer
 
 
 class ServerDetailView(APIView):
-    serializer_class = None
+    serializer_class = ServerDetailSerializer
 
     @extend_schema(
         summary="Retrieve site details",
@@ -27,12 +27,13 @@ class ServerDetailView(APIView):
             "website": "https://judevector.vercel.app/",
             "description": "A simple REST API for managing blog posts",
             "twitter": "https://twitter.com/judevector",
+            "github": "https://github.com/judevector",
         }
         return Response(data=response, status=status.HTTP_200_OK)
 
 
 class ServerStatusView(APIView):
-    serializer_class = None
+    serializer_class = ServerStatusSerializer
 
     @extend_schema(
         summary="API health check",
@@ -40,7 +41,7 @@ class ServerStatusView(APIView):
         tags=["HealthCheck"],
     )
     def get(self, request: Request):
-        response = {"status": "Server is working"}
+        response = {"message": "success", "status": "Server is working properly"}
         return Response(data=response, status=status.HTTP_200_OK)
 
 
@@ -56,7 +57,6 @@ class PostListCreateView(APIView):
     def get(self, request: Request, *args, **kwargs):
         posts = Post.objects.all()
         serializer_data = self.serializer_class(instance=posts, many=True)
-
         response = {
             "message": "posts",
             "data": serializer_data.data,
