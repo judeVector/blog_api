@@ -10,7 +10,7 @@ from .models import Post
 from .serializers import PostSerializer
 
 
-class ServerDetail(APIView):
+class ServerDetailView(APIView):
     serializer_class = None
 
     @extend_schema(
@@ -31,7 +31,7 @@ class ServerDetail(APIView):
         return Response(data=response, status=status.HTTP_200_OK)
 
 
-class ServerStatus(APIView):
+class ServerStatusView(APIView):
     serializer_class = None
 
     @extend_schema(
@@ -44,17 +44,18 @@ class ServerStatus(APIView):
         return Response(data=response, status=status.HTTP_200_OK)
 
 
-class GetOrCreatePost(APIView):
+class PostListCreateView(APIView):
     serializer_class = PostSerializer
 
     @extend_schema(
+        operation_id="list_posts",
         summary="Retrieve Posts",
         description="This endpoint retrieves a list of posts",
         tags=["Post"],
     )
-    def get(self, request: Request):
+    def get(self, request: Request, *args, **kwargs):
         posts = Post.objects.all()
-        serializer_data = PostSerializer(posts, many=True)
+        serializer_data = self.serializer_class(instance=posts, many=True)
 
         response = {
             "message": "posts",
@@ -68,7 +69,7 @@ class GetOrCreatePost(APIView):
         tags=["Post"],
     )
     def post(self, request: Request):
-        serializer_data = PostSerializer(data=request.data)
+        serializer_data = self.serializer_class(data=request.data)
 
         if serializer_data.is_valid():
             serializer_data.save()
@@ -76,21 +77,22 @@ class GetOrCreatePost(APIView):
                 "message": "Post created successfully",
                 "data": serializer_data.data,
             }
-            return Response(response, status=status.HTTP_201_CREATED)
+            return Response(data=response, status=status.HTTP_201_CREATED)
         return Response(data=serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class GetUpdateOrDeleteById(APIView):
+class PostRetrieveUpdateDeleteView(APIView):
     serializer_class = PostSerializer
 
     @extend_schema(
+        operation_id="retrieve_post_by_id",
         summary="Retrieve Post by ID",
         description="This endpoint retrieves a post by its ID",
         tags=["Post"],
     )
     def get(self, request: Request, post_id: int):
         post = get_object_or_404(Post, pk=post_id)
-        serializer_data = PostSerializer(instance=post)
+        serializer_data = self.serializer_class(instance=post)
 
         response = {
             "message": "post",
@@ -105,7 +107,7 @@ class GetUpdateOrDeleteById(APIView):
     )
     def put(self, request: Request, post_id: int):
         post = get_object_or_404(Post, pk=post_id)
-        serializer_data = PostSerializer(instance=post, data=request.data)
+        serializer_data = self.serializer_class(instance=post, data=request.data)
 
         if serializer_data.is_valid():
             serializer_data.save()
