@@ -31,6 +31,8 @@ ALLOWED_HOSTS = ["localhost", ".vercel.app"]
 
 # Application definition
 
+AUTH_USER_MODEL = "account.User"
+
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
@@ -77,10 +79,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Custom Apps
+    "blog",
+    "account",
+    # Third Party Apps
     "rest_framework",
     "drf_spectacular",
-    "blog",
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

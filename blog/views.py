@@ -9,6 +9,8 @@ from drf_spectacular.utils import extend_schema
 from .models import Post
 from .serializers import PostSerializer, ServerDetailSerializer, ServerStatusSerializer
 
+tags = ["Post"]
+
 
 class ServerDetailView(APIView):
     serializer_class = ServerDetailSerializer
@@ -52,7 +54,7 @@ class PostListCreateView(APIView):
         operation_id="list_posts",
         summary="Retrieve Posts",
         description="This endpoint retrieves a list of posts",
-        tags=["Post"],
+        tags=tags,
     )
     def get(self, request: Request, *args, **kwargs):
         posts = Post.objects.all()
@@ -66,7 +68,7 @@ class PostListCreateView(APIView):
     @extend_schema(
         summary="Create Post",
         description="This endpoint creates a new post",
-        tags=["Post"],
+        tags=tags,
     )
     def post(self, request: Request):
         serializer_data = self.serializer_class(data=request.data)
@@ -88,7 +90,7 @@ class PostRetrieveUpdateDeleteView(APIView):
         operation_id="retrieve_post_by_id",
         summary="Retrieve Post by ID",
         description="This endpoint retrieves a post by its ID",
-        tags=["Post"],
+        tags=tags,
     )
     def get(self, request: Request, post_id: int):
         post = get_object_or_404(Post, pk=post_id)
@@ -103,7 +105,7 @@ class PostRetrieveUpdateDeleteView(APIView):
     @extend_schema(
         summary="Update Post by ID",
         description="This endpoint updates a post by its ID",
-        tags=["Post"],
+        tags=tags,
     )
     def put(self, request: Request, post_id: int):
         post = get_object_or_404(Post, pk=post_id)
@@ -121,7 +123,7 @@ class PostRetrieveUpdateDeleteView(APIView):
     @extend_schema(
         summary="Delete Post by ID",
         description="This endpoint deletes a post by its ID",
-        tags=["Post"],
+        tags=tags,
     )
     def delete(self, request: Request, post_id: int):
         post = get_object_or_404(Post, pk=post_id)

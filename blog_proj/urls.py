@@ -32,4 +32,5 @@ urlpatterns = [
     ),
     path("admin/", admin.site.urls),
     path("api/v1/", include("blog.urls")),
+    path("api/v1/", include("account.urls")),
 ]
