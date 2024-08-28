@@ -53,7 +53,7 @@ ENV DJANGO_DEBUG=${DJANGO_DEBUG}
 # run any other commands that do not need the database
 # such as:
 
-RUN python manage.py collectstatic 
+# RUN python manage.py collectstatic --noinput
 
 # whitenoise
 
