@@ -50,6 +50,9 @@ ENV DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
 ARG DJANGO_DEBUG=0
 ENV DJANGO_DEBUG=${DJANGO_DEBUG}
 
+ARG BASE_URL
+ENV BASE_URL=${BASE_URL}
+
 # whitenoise
 RUN python manage.py collectstatic --noinput
 
