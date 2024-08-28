@@ -26,8 +26,14 @@ SECRET_KEY = config("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DJANGO_DEBUG", cast=bool)
+BASE_URL = config("BASE_URL", cast=str)
 
-ALLOWED_HOSTS = ["localhost", ".vercel.app", ".railway.app"]
+ALLOWED_HOSTS = [".railway.app", BASE_URL]
+
+CSRF_TRUSTED_ORIGINS = [BASE_URL]
+
+if DEBUG:
+    ALLOWED_HOSTS += ["127.0.0.1", "localhost"]
 
 
 # Application definition
