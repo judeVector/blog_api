@@ -51,7 +51,7 @@ class ServerStatusView(APIView):
 
 class PostListCreateView(APIView):
     serializer_class = PostSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     @extend_schema(
         operation_id="list_posts",
@@ -88,7 +88,7 @@ class PostListCreateView(APIView):
 
 class PostRetrieveUpdateDeleteView(APIView):
     serializer_class = PostSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     @extend_schema(
         operation_id="retrieve_post_by_id",
