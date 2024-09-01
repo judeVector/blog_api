@@ -1,14 +1,37 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from .models import Post
 
+User = get_user_model()
+
 
 class PostSerializer(serializers.ModelSerializer):
-    title = serializers.CharField(max_length=50)
+    author_username = serializers.SerializerMethodField()
+    # author_id = serializers.PrimaryKeyRelatedField(
+    #     source="author", queryset=User.objects.all(), write_only=True
+    # )
 
     class Meta:
         model = Post
-        fields = ["id", "title", "post", "created_at", "updated_at"]
+        fields = [
+            "id",
+            "title",
+            "post",
+            "created_at",
+            "updated_at",
+            "author_id",
+            "author_username",
+        ]
+
+    def get_author_username(self, obj):
+        return obj.author.username if obj.author else None
+
+    def to_representation(self, instance):
+        # This replaces the "author_username" field with just "author"
+        representation = super().to_representation(instance)
+        representation["author"] = representation.pop("author_username")
+        return representation
 
 
 class ServerDetailSerializer(serializers.Serializer):
