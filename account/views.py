@@ -5,9 +5,10 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authtoken.models import Token
+
 
 from .serializers import SignUpSerializer, LoginSerializer, RegenerateTokenSerializer
+from .utils.tokens import create_jwt_pair_for_user
 
 from drf_spectacular.utils import extend_schema
 
@@ -50,11 +51,12 @@ class LoginView(APIView):
         serializer_data.is_valid(raise_exception=True)
 
         user = serializer_data.validated_data["user"]
-        token = serializer_data.validated_data["token"]
+        # token = serializer_data.validated_data["token"]
+        tokens = create_jwt_pair_for_user(user)
 
         response = {
             "message": "User logged in successfully",
-            "data": {"token": token},
+            "data": {"token": tokens},
         }
         return Response(data=response, status=status.HTTP_200_OK)
 
