@@ -4,13 +4,13 @@ from rest_framework import generics, status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
+from drf_spectacular.utils import extend_schema
 
 from .serializers import SignUpSerializer, LoginSerializer, RegenerateTokenSerializer
 from .utils.tokens import create_jwt_pair_for_user
 
-from drf_spectacular.utils import extend_schema
 
 # Create your views here.
 
@@ -18,6 +18,7 @@ tags = ["Auth"]
 
 
 class SignUpView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
     serializer_class = SignUpSerializer
 
     @extend_schema(
@@ -39,6 +40,7 @@ class SignUpView(generics.GenericAPIView):
 
 
 class LoginView(APIView):
+    permission_classes = [AllowAny]
     serializer_class = LoginSerializer
 
     @extend_schema(
@@ -59,11 +61,6 @@ class LoginView(APIView):
             "data": {"token": tokens},
         }
         return Response(data=response, status=status.HTTP_200_OK)
-
-    # def get(self, request: Request, *args, **kwargs):
-    #     content = {"user": str(request.user), "auth": str(request.auth)}
-
-    #     return Response(data=content, status=status.HTTP_200_OK)
 
 
 class RegenerateTokenView(APIView):

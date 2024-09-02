@@ -15,7 +15,7 @@ from drf_spectacular.utils import extend_schema
 
 from .models import Post
 from .serializers import PostSerializer, ServerDetailSerializer, ServerStatusSerializer
-from .permissions import AuthorOrReadOnlyPermission
+from .permissions import AuthenticatedAndAuthorOnlyPermission
 
 tags = ["Post"]
 
@@ -59,7 +59,8 @@ class ServerStatusView(APIView):
 
 class PostListCreateView(APIView):
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [AuthenticatedAndAuthorOnlyPermission]
 
     @extend_schema(
         operation_id="list_posts",
@@ -97,7 +98,7 @@ class PostListCreateView(APIView):
 
 class PostRetrieveUpdateDeleteView(APIView):
     serializer_class = PostSerializer
-    permission_classes = [AuthorOrReadOnlyPermission]
+    permission_classes = [AuthenticatedAndAuthorOnlyPermission]
 
     @extend_schema(
         operation_id="retrieve_post_by_id",
