@@ -7,10 +7,9 @@ User = get_user_model()
 
 
 class PostSerializer(serializers.ModelSerializer):
+    """Serializer for Post objects"""
+
     author_username = serializers.SerializerMethodField()
-    # author_id = serializers.PrimaryKeyRelatedField(
-    #     source="author", queryset=User.objects.all(), write_only=True
-    # )
 
     class Meta:
         model = Post

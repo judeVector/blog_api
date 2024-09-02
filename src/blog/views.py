@@ -3,13 +3,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import APIView, api_view, permission_classes
-from rest_framework.permissions import (
-    AllowAny,
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
-    IsAdminUser,
-)
+from rest_framework.decorators import APIView
+from rest_framework.permissions import AllowAny
 
 from drf_spectacular.utils import extend_schema
 
@@ -72,7 +67,7 @@ class PostListCreateView(APIView):
         posts = Post.objects.all()
         serializer_data = self.serializer_class(instance=posts, many=True)
         response = {
-            "message": "posts",
+            "message": "All posts",
             "data": serializer_data.data,
         }
         return Response(data=response, status=status.HTTP_200_OK)
