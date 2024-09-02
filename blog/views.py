@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import APIView, api_view, permission_classes
 from rest_framework.permissions import (
-    IsAuthenticated,
     AllowAny,
+    IsAuthenticated,
     IsAuthenticatedOrReadOnly,
     IsAdminUser,
 )
@@ -20,22 +20,9 @@ from .permissions import AuthorOrReadOnlyPermission
 tags = ["Post"]
 
 
-@api_view(["GET", "POST"])
-@permission_classes([AllowAny])
-def homepage(request: Request):
-    if request.method == "POST":
-        data = request.data
-
-        response = {"message": "Hello World", "data": data}
-
-        return Response(data=response, status=status.HTTP_200_OK)
-    response = {"message": "Hello World"}
-
-    return Response(data=response, status=status.HTTP_200_OK)
-
-
 class ServerDetailView(APIView):
     serializer_class = ServerDetailSerializer
+    permission_classes = [AllowAny]
 
     @extend_schema(
         summary="Retrieve site details",
@@ -58,6 +45,7 @@ class ServerDetailView(APIView):
 
 class ServerStatusView(APIView):
     serializer_class = ServerStatusSerializer
+    permission_classes = [AllowAny]
 
     @extend_schema(
         summary="API health check",
@@ -89,6 +77,7 @@ class PostListCreateView(APIView):
         return Response(data=response, status=status.HTTP_200_OK)
 
     @extend_schema(
+        operation_id="create_post",
         summary="Create Post",
         description="This endpoint creates a new post",
         tags=tags,
@@ -110,6 +99,12 @@ class PostRetrieveUpdateDeleteView(APIView):
     serializer_class = PostSerializer
     permission_classes = [AuthorOrReadOnlyPermission]
 
+    @extend_schema(
+        operation_id="retrieve_post_by_id",
+        summary="Retrieve Post by ID",
+        description="This endpoint retrieves a post by its ID",
+        tags=tags,
+    )
     def get(self, request: Request, post_id: int):
         post = get_object_or_404(Post, pk=post_id)
         self.check_object_permissions(request, post)
@@ -121,6 +116,12 @@ class PostRetrieveUpdateDeleteView(APIView):
         }
         return Response(data=response, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        operation_id="update_post_by_id",
+        summary="Update Post by ID",
+        description="This endpoint updates a post by its ID",
+        tags=tags,
+    )
     def put(self, request: Request, post_id: int):
         post = get_object_or_404(Post, pk=post_id)
         self.check_object_permissions(request, post)
@@ -135,6 +136,12 @@ class PostRetrieveUpdateDeleteView(APIView):
             return Response(response, status=status.HTTP_200_OK)
         return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @extend_schema(
+        operation_id="delete_post_by_id",
+        summary="Delete Post by ID",
+        description="This endpoint deletes a post by its ID",
+        tags=tags,
+    )
     def delete(self, request: Request, post_id: int):
         post = get_object_or_404(Post, pk=post_id)
         self.check_object_permissions(request, post)

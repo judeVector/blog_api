@@ -24,7 +24,7 @@ class PostSerializer(serializers.ModelSerializer):
             "author_username",
         ]
 
-    def get_author_username(self, obj):
+    def get_author_username(self, obj) -> str:
         return obj.author.username if obj.author else None
 
     def to_representation(self, instance):
