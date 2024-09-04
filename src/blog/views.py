@@ -5,8 +5,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import APIView
 from rest_framework.permissions import AllowAny
+from rest_framework.pagination import PageNumberPagination
 
 from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 
 from .models import Post
 from .serializers import PostSerializer, ServerDetailSerializer, ServerStatusSerializer
@@ -62,15 +64,31 @@ class PostListCreateView(APIView):
         summary="Retrieve Posts",
         description="This endpoint retrieves a list of posts",
         tags=tags,
+        parameters=[
+            OpenApiParameter(
+                name="page",
+                type=OpenApiTypes.INT,
+                location=OpenApiParameter.QUERY,
+                description="Page number",
+                required=False,
+            ),
+        ],
     )
     def get(self, request: Request, *args, **kwargs):
         posts = Post.objects.all()
-        serializer_data = self.serializer_class(instance=posts, many=True)
+
+        # Use pagination
+        paginator = PageNumberPagination()
+        paginated_posts = paginator.paginate_queryset(posts, request)
+        serializer_data = self.serializer_class(instance=paginated_posts, many=True)
+
         response = {
             "message": "All posts",
             "data": serializer_data.data,
         }
-        return Response(data=response, status=status.HTTP_200_OK)
+
+        return paginator.get_paginated_response(response)
+        # return Response(data=response, status=status.HTTP_200_OK)
 
     @extend_schema(
         operation_id="create_post",
