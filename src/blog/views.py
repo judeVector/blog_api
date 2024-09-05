@@ -75,7 +75,7 @@ class PostListCreateView(APIView):
         ],
     )
     def get(self, request: Request, *args, **kwargs):
-        posts = Post.objects.all()
+        posts = Post.objects.all().order_by("created_at")
 
         # Use pagination
         paginator = PageNumberPagination()
