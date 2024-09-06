@@ -26,6 +26,8 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractUser):
+    """User Model for creating accounts."""
+
     email = models.EmailField(max_length=80, unique=True)
     username = models.CharField(max_length=50)
     date_of_birth = models.DateField(null=True)

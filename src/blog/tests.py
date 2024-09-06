@@ -28,7 +28,7 @@ class PostListCreateViewTestCase(APITestCase):
                 "password": "password1234",
             },
         )
-        token = response.data["data"]["token"]["access_token"]
+        token = response.data["data"]["tokens"]["access_token"]
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + token)
 
     def test_list_posts(self):

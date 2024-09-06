@@ -1,5 +1,3 @@
-from django.contrib.auth import authenticate
-
 from rest_framework import generics, status
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -58,7 +56,7 @@ class LoginView(APIView):
 
         response = {
             "message": "User logged in successfully",
-            "data": {"token": tokens},
+            "data": {"tokens": tokens},
         }
         return Response(data=response, status=status.HTTP_200_OK)
 
