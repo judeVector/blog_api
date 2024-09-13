@@ -18,17 +18,11 @@ SECRET_KEY = config("DJANGO_SECRET_KEY")
 DEBUG = config("DJANGO_DEBUG", cast=bool)
 BASE_URL = config("BASE_URL")
 
-ALLOWED_HOSTS = [
-    ".railway.app",
-    BASE_URL,
-]
+ALLOWED_HOSTS = [".railway.app", BASE_URL, "http://localhost:5173"]
 
 CSRF_TRUSTED_ORIGINS = [BASE_URL]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    BASE_URL,
-]
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWS_CREDENTIALS = True
 
 if DEBUG:
