@@ -20,9 +20,21 @@ BASE_URL = config("BASE_URL")
 
 ALLOWED_HOSTS = [".railway.app", BASE_URL, "http://localhost:5173"]
 
-CSRF_TRUSTED_ORIGINS = [BASE_URL]
+# CSRF_TRUSTED_ORIGINS = [BASE_URL]
 
-CORS_ALLOW_ALL_ORIGINS = True
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    BASE_URL,
+    "https://blogproj.up.railway.app",
+]
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    BASE_URL,
+    "https://blogproj.up.railway.app",
+]
+
 CORS_ALLOWS_CREDENTIALS = True
 
 if DEBUG:
@@ -101,6 +113,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "rest_framework",
     "rest_framework.authtoken",
+    "django-cors-headers",
 ]
 
 
